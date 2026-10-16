@@ -60,6 +60,7 @@
           libxcb
           vulkan-loader
           libglvnd # libEGL / libGL for wgpu's GL backend and glutin
+          dbus # libdbus-1.so.3: rfd's xdg-desktop-portal file chooser dlopen()s it
         ];
 
       mkWordcraft =
@@ -100,6 +101,7 @@
           nativeBuildInputs = [
             pkgs.pkg-config
             pkgs.patchelf
+            pkgs.makeWrapper
           ];
 
           # About 800 tests; the UI ones render through wgpu and need a GPU, which the Nix
@@ -136,6 +138,16 @@
           # Only the GUI needs the graphics/windowing libraries; wordcraft-cli is headless.
           postFixup = ''
             patchelf --add-rpath ${lib.makeLibraryPath (runtimeLibs pkgs)} $out/bin/wordcraft
+
+            # WordCraft runs through XWayland whenever DISPLAY is set (winit has no file
+            # drag-and-drop on Wayland, and the compositor draws proper window decorations for
+            # X11 windows), so nothing is forced here. Run with WORDCRAFT_WAYLAND=1 for a native
+            # Wayland client.
+            #
+            # dbus-send: WordCraft probes the xdg-desktop-portal file chooser with it, and uses
+            # its built-in file browser when there is no portal.
+            wrapProgram $out/bin/wordcraft \
+              --suffix PATH : ${lib.makeBinPath [ pkgs.dbus ]}
           '';
 
           meta = {

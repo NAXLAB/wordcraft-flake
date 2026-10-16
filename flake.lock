@@ -36,7 +36,24 @@
     "root": {
       "inputs": {
         "craft-fonts": "craft-fonts",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "wordcraft-src": "wordcraft-src"
+      }
+    },
+    "wordcraft-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792121096,
+        "narHash": "sha256-URerLuATjpPV8mQRrMLtWTNFXtbIasS0eP7dL2yD0cU=",
+        "owner": "storytold",
+        "repo": "wordcraft",
+        "rev": "eae242176108d328c5dd81fbc10370c51ab90706",
+        "type": "github"
+      },
+      "original": {
+        "owner": "storytold",
+        "repo": "wordcraft",
+        "type": "github"
       }
     }
   },
